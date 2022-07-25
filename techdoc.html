@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+		<title>PL/pgSQL — SQL Procedural Language</title>
+    <link rel="stylesheet" href="techdoc.css" />
+  </head>
+  <body>
+    <main id="main-doc">
+      <section class="main-section" id="Advantages_of_Using_PL/pgSQL">
+        <header>Advantages of Using PL/pgSQL</header>
+        <p>SQL is the language PostgreSQL and most other relational databases use as query language. It's portable and easy to learn. But every SQL statement must be executed individually by the database server.</p>
+        <p>With PL/pgSQL you can group a block of computation and a series of queries inside the database server, thus having the power of a procedural language and the ease of use of SQL, but with considerable savings of client/server communication overhead.</p>
+        <ul>
+          <li>Extra round trips between client and server are eliminated</li>
+          <li>Intermediate results that the client does not need do not have to be marshaled or transferred between server and client</li>
+          <li>Multiple rounds of query parsing can be avoided</li>
+        </ul>
+      </section>
+      <section class="main-section" id="Supported_Argument_and_Result_Data_Types">
+        <header>Supported Argument and Result Data Types</header>
+        <p>Functions written in PL/pgSQL can accept as arguments any scalar or array data type supported by the server, and they can return a result of any of these types. They can also accept or return any composite type (row type) specified by name. It is also possible to declare a PL/pgSQL function as accepting record, which means that any composite type will do as input, or as returning record, which means that the result is a row type whose columns are determined by specification in the calling query</p>
+        <p>PL/pgSQL functions can be declared to accept a variable number of arguments by using the VARIADIC marker. This works exactly the same way as for SQL functions.</p>
+      </section>
+      <section class="main-section" id="Structure_of_PL/pgSQL">
+        <header>Structure of PL/pgSQL</header>
+        <p>Functions written in PL/pgSQL are defined to the server by executing CREATE FUNCTION commands. Such a command would normally look like, say,</p>
+        <code>CREATE FUNCTION somefunc(integer, text) RETURNS integer
+        AS 'function body text'
+        LANGUAGE plpgsql;</code>
+      <p>PL/pgSQL is a block-structured language. The complete text of a function body must be a block. A block is defined as:</p>
+      <code>
+      [ <<label>> ]
+      [ DECLARE
+        declarations ]
+      BEGIN
+        statements
+      END [ label ];
+      </code>
+      </section>
+      <section class="main-section" id="Declarations">
+        <header>Declarations</header>
+        <p>All variables used in a block must be declared in the declarations section of the block. (The only exceptions are that the loop variable of a FOR loop iterating over a range of integer values is automatically declared as an integer variable, and likewise the loop variable of a FOR loop iterating over a cursor's result is automatically declared as a record variable.)</p>
+        <p>PL/pgSQL variables can have any SQL data type, such as integer, varchar, and char.</p>
+        <p>Here are some examples of variable declarations:</p>
+        <code>
+          user_id integer;
+          quantity numeric(5);
+          url varchar;
+          myrow tablename%ROWTYPE;
+          myfield tablename.columnname%TYPE;
+          arow RECORD;
+        </code>
+        <ul>
+          <li>Row Types</li>
+          <li>Record Types</li>
+        </ul>
+      </section>
+      <section class="main-section" id="Expressions">
+        <header>Expressions</header>
+        <p>All expressions used in PL/pgSQL statements are processed using the server's main SQL executor. For example, when you write a PL/pgSQL statement like</p>
+        <code>IF expression THEN ...</code>
+        <p>PL/pgSQL will evaluate the expression by feeding a query like</p>
+        <code>SELECT expression</code>
+      </section>
+    </main>
+    <nav id="navbar">
+      <header>PL/pgSQL</header>
+      <a href="#Advantages_of_Using_PL/pgSQL" class="nav-link">Advantages of Using PL/pgSQL</a><br >
+      <a href="#Supported_Argument_and_Result_Data_Types" class="nav-link">Supported Argument and Result Data Types</a><br/>
+      <a href="#Structure_of_PL/pgSQL" class="nav-link">Structure of PL/pgSQL</a><br/>
+      <a href="#Declarations" class="nav-link">Declarations</a><br/>
+      <a href="#Expressions" class="nav-link">Expressions</a><br/>
+    </nav>
+  </body>
+</html>
